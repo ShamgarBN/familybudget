@@ -1,0 +1,21 @@
+node_modules
+dist
+dist-ssr
+.vite
+.DS_Store
+*.local
+.env
+.env.*
+!.env.example
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Electron build outputs
+release/
+build/icon.iconset/
+
+# Editor / OS cruft
+.idea/
+.vscode/
+*.swp

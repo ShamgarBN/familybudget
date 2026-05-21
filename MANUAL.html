@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>User manual — Niemann Family Finances</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg: #f0f3f8;
+  --surface: #ffffff;
+  --ink: #0b1220;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --accent: #3b7eff;
+  --accent-soft: rgba(59, 126, 255, 0.08);
+  --code-bg: #0f172a;
+  --code-fg: #e2e8f0;
+}
+
+* { box-sizing: border-box; }
+html, body { padding: 0; margin: 0; }
+body {
+  font-family: 'DM Sans', system-ui, -apple-system, Segoe UI, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 56px 48px 80px;
+  background: var(--surface);
+  min-height: 100vh;
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+}
+
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(240, 243, 248, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+  padding: 10px 0;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.toolbar .brand {
+  font-size: 13px;
+  color: var(--muted);
+}
+.toolbar .actions { display: flex; gap: 8px; }
+.toolbar button, .toolbar a {
+  font: inherit;
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+.toolbar button:hover, .toolbar a:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.toolbar button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+.toolbar button.primary:hover { color: white; opacity: 0.92; }
+
+h1, h2, h3, h4 {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  page-break-after: avoid;
+}
+h1 {
+  font-size: 32px;
+  margin: 0 0 12px;
+  padding-bottom: 12px;
+  border-bottom: 3px solid var(--accent);
+}
+h2 {
+  font-size: 22px;
+  margin: 40px 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--line);
+}
+h3 { font-size: 17px; margin: 28px 0 8px; color: #1e293b; }
+h4 { font-size: 15px; margin: 18px 0 6px; color: #334155; }
+
+p { margin: 8px 0 14px; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+ul, ol { margin: 8px 0 16px; padding-left: 26px; }
+li { margin: 4px 0; }
+li > p { margin: 4px 0; }
+li ::marker { color: var(--muted); }
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 32px 0;
+}
+
+blockquote {
+  margin: 12px 0;
+  padding: 8px 16px;
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+  color: #475569;
+  border-radius: 0 6px 6px 0;
+}
+
+code, kbd, pre {
+  font-family: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+:not(pre) > code {
+  background: #f1f5f9;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: #0f172a;
+  border: 1px solid var(--line);
+}
+
+pre {
+  background: var(--code-bg);
+  color: var(--code-fg);
+  padding: 16px 18px;
+  border-radius: 10px;
+  overflow-x: auto;
+  font-size: 13.5px;
+  line-height: 1.55;
+  margin: 12px 0 20px;
+  page-break-inside: avoid;
+}
+pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+kbd {
+  display: inline-block;
+  padding: 1px 6px;
+  font-size: 0.85em;
+  background: linear-gradient(to bottom, #ffffff, #f1f5f9);
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.12);
+  color: #0f172a;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 12px 0 20px;
+  font-size: 14px;
+  page-break-inside: avoid;
+}
+th, td {
+  border: 1px solid var(--line);
+  padding: 8px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+th {
+  background: #f8fafc;
+  font-weight: 600;
+}
+tbody tr:nth-child(even) td { background: #fbfcfd; }
+
+img { max-width: 100%; height: auto; }
+
+/* Print styling */
+@media print {
+  body { background: #fff; font-size: 11pt; }
+  .page {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+    min-height: 0;
+  }
+  .toolbar { display: none; }
+  h1 { font-size: 22pt; }
+  h2 { font-size: 15pt; }
+  h3 { font-size: 12pt; }
+  pre { font-size: 9.5pt; }
+  a { color: inherit; text-decoration: none; }
+  table, pre { break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="toolbar">
+    <span class="brand">Niemann Family Finances · User manual</span>
+    <div class="actions">
+      <a href="README.html">← Back to read me</a>
+      <button class="primary" onclick="window.print()">⎙ Print / Save as PDF</button>
+    </div>
+  </div>
+<h1>Niemann Family Finances — User Manual</h1>
+<p>A local-first family budgeting app. All data lives in your browser via
+<code>localStorage</code>. No server, no account, no tracking.</p>
+<hr>
+<h2>1. Setup</h2>
+<h3>Prerequisites</h3>
+<ul>
+<li><strong>Node.js 20.x or newer</strong> (LTS recommended). Verify with <code>node -v</code>.</li>
+<li><strong>npm 10+</strong> (ships with Node). Verify with <code>npm -v</code>.</li>
+<li>A modern browser (Chrome, Edge, Safari, Firefox).</li>
+</ul>
+<h3>First-time install</h3>
+<pre><code class="language-bash">cd &quot;Family Budget&quot;
+npm install
+</code></pre>
+<p>This creates <code>node_modules/</code> (~250 MB) and a <code>package-lock.json</code>.</p>
+<h3>Run in development</h3>
+<pre><code class="language-bash">npm run dev
+</code></pre>
+<p>Opens at <code>http://localhost:5173</code> (or the next free port). Hot-reloads on file
+saves.</p>
+<h3>Build for offline use</h3>
+<pre><code class="language-bash">npm run build      # outputs to ./dist
+npm run preview    # serves the production build at http://localhost:4173
+</code></pre>
+<h3>Hosting it permanently (optional)</h3>
+<p>The build output in <code>./dist</code> is a fully static SPA — push it to any static
+host:</p>
+<ul>
+<li><strong>GitHub Pages</strong>: commit <code>dist</code> to a <code>gh-pages</code> branch.</li>
+<li><strong>Netlify / Vercel / Cloudflare Pages</strong>: drop the <code>dist</code> folder.</li>
+<li><strong>Local-only</strong>: serve <code>dist</code> with anything (e.g. <code>npx serve dist</code>).</li>
+</ul>
+<h3>Installing the macOS app</h3>
+<p>The app can be packaged as a native macOS <code>.app</code> so a non-technical user just
+double-clicks the icon — no terminal, no browser, no localhost. Build target is
+Apple Silicon (M1 / M2 / M3 / M4), so it runs natively on a Mac Mini with a
+silicon chip.</p>
+<h4>Build the app (one-time, on any Mac with the project checked out)</h4>
+<pre><code class="language-bash">npm install        # if you haven&#39;t already
+npm run dist:mac
+</code></pre>
+<p>This takes 1–2 minutes (the first run also downloads ~120 MB of Electron
+runtime into your user cache). The build includes an ad-hoc signing step so
+Apple Silicon Macs do not treat the app bundle as structurally invalid. When it
+finishes, you get:</p>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>release/Niemann Family Finances-&lt;version&gt;-arm64.dmg</code></td>
+<td>Drag-to-Applications installer (~120 MB). The thing you copy to her Mac.</td>
+</tr>
+<tr>
+<td><code>release/mac-arm64/Niemann Family Finances.app</code></td>
+<td>The unpacked app, for testing locally.</td>
+</tr>
+</tbody></table>
+<h4>Install on her Mac Mini</h4>
+<ol>
+<li><strong>Copy the <code>.dmg</code></strong> to her Mac (AirDrop, USB stick, shared folder — whatever&#39;s
+  easiest).</li>
+<li><strong>Double-click the <code>.dmg</code></strong>. A Finder window opens showing the app icon.</li>
+<li><strong>Drag <code>Niemann Family Finances</code> into the <code>Applications</code> folder</strong> in that
+  same window.</li>
+<li>Eject the disk image (right-click → Eject).</li>
+<li>Open <strong>Launchpad</strong> and click the new icon. On the <strong>very first launch</strong>
+  macOS will refuse to open it because we don&#39;t pay Apple&#39;s $99/year code-signing
+  fee. To bypass this one time:</li>
+</ol>
+<ul>
+<li>Open <strong>Finder → Applications</strong>.</li>
+<li><strong>Right-click</strong> (or Control-click) on <code>Niemann Family Finances</code>.</li>
+<li>Choose <strong>Open</strong>.</li>
+<li>In the dialog that warns &quot;Apple could not verify…&quot;, click <strong>Open</strong> again.</li>
+<li>macOS remembers the choice — every future launch is just a normal click.</li>
+</ul>
+<p>Optional: drag the icon from <code>Applications</code> into the <strong>Dock</strong> so she has a
+permanent one-click launcher.</p>
+<p>If macOS says the app is <strong>damaged</strong> instead of offering the right-click
+Open flow, make sure you are using a DMG built after version <code>1.0.1</code>. Earlier
+test builds were unsigned, and Apple Silicon Macs can report unsigned app
+bundles as damaged. Delete the old app from <code>Applications</code>, copy over the new
+DMG, and install again.</p>
+<h4>Daily usage for her</h4>
+<ul>
+<li>Click the icon in the Dock (or Launchpad).</li>
+<li>A single window opens with the budgeting app inside.</li>
+<li>Everything auto-saves as she types. Closing the window or quitting the app
+loses nothing.</li>
+<li>Cmd+Q quits. Cmd+W closes the window. Cmd+M minimizes.</li>
+</ul>
+<h4>Shipping updates</h4>
+<p>Her data lives in <code>~/Library/Application Support/Niemann Family Finances/</code>
+(survives app updates) — <strong>not</strong> inside the <code>.app</code> itself.</p>
+<p>To ship a new version:</p>
+<ol>
+<li>Make changes on your dev Mac.</li>
+<li>Bump <code>version</code> in <code>package.json</code> (e.g. <code>1.0.0</code> → <code>1.0.1</code>) so DMG filenames
+  don&#39;t collide.</li>
+<li><code>npm run dist:mac</code>.</li>
+<li>Copy the new <code>.dmg</code> to her Mac, drag the new app into <code>Applications</code> (Finder
+  will ask to replace — say Replace), and open. Her household data is
+  untouched.</li>
+</ol>
+<p>If you ever want a totally fresh start, delete the
+<code>~/Library/Application Support/Niemann Family Finances/</code> folder — that&#39;s where
+the data file lives.</p>
+<h4>Backup hygiene</h4>
+<p>Because the data file is stored on a single Mac, treat backups seriously.
+Inside the app: <code>⚙ Settings → ⬇ Download JSON backup</code>. A reasonable cadence is
+weekly into iCloud Drive or any folder that&#39;s part of Time Machine.</p>
+<h3>Moving to another computer</h3>
+<p>The project files and your data are separate.</p>
+<ol>
+<li><strong>Project files</strong> — copy the folder, run <code>npm install</code>, then <code>npm run dev</code>.</li>
+<li><strong>Your data</strong> — on the old machine, <code>⚙ Settings → ⬇ Download JSON backup</code>.
+  Move the JSON file to the new machine, then <code>⚙ Settings → ⬆ Restore from JSON</code>.</li>
+</ol>
+<p>Backups include accounts, categories, transactions, recurring rules, pay
+periods, budgets, learned merchant rules, and settings.</p>
+<hr>
+<h2>2. The interface at a glance</h2>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│  Header: title · account filters · search · ⌥ undo · ⚙     │
+├──────────────────────────┬──────────────────────────────────┤
+│   Spending Mix (donut)   │   Import / Export                │
+│                          │   Recurring                      │
+├──────────────────────────┴──────────────────────────────────┤
+│   Ledger                                                    │
+│   ├─ Pay period 1 (collapsible)                             │
+│   │   ├─ Transactions table                                 │
+│   │   └─ Budget breakdown                                   │
+│   ├─ Pay period 2                                           │
+│   └─ ...                                                    │
+└─────────────────────────────────────────────────────────────┘
+</code></pre>
+<h3>Header</h3>
+<ul>
+<li><strong>Title</strong> + <strong>Account filter pills</strong> (All / Bank / Credit / Savings — multi-select).</li>
+<li><strong>Search</strong> filters titles, memos, and category names.</li>
+<li><strong>Undo</strong> — <code>⌘Z</code> / <code>Ctrl+Z</code> works too. 60-step history.</li>
+<li><strong>⚙ Categories</strong> — manage categories, subs, emojis, colors.</li>
+<li><strong>⚙ Settings</strong> — pay-period frequency, learned rules, backup/restore, PDF.</li>
+</ul>
+<hr>
+<h2>3. Adding transactions</h2>
+<h3>Manual entry</h3>
+<p>Click <code>+ Transaction</code> in the Ledger toolbar. Modal asks for:</p>
+<ul>
+<li>Date (defaults to today)</li>
+<li>Account (Bank / Credit / Savings)</li>
+<li>Title (auto-focused)</li>
+<li>Category (and Subcategory if available)</li>
+<li>Type — <code>+</code> Income, <code>−</code> Expense, <code>~</code> Neutral</li>
+<li>Amount (positive number; sign comes from Type)</li>
+<li>Memo (optional)</li>
+</ul>
+<p>If the date doesn&#39;t fit any existing pay period, a new one is auto-created.</p>
+<h3>CSV import</h3>
+<p>Drop a CSV onto <strong>Import / Export → Bank Account / Credit Card / Savings</strong>.</p>
+<p>Supported formats:</p>
+<ul>
+<li><strong>Bank</strong> — accepts <code>Date / Description / Amount / Running Bal.</code> style statements,
+including ones with a metadata block at the top (e.g. Bank of America).
+Handles parens-style negatives <code>(45.00)</code> and Debit/Credit two-column layouts.</li>
+<li><strong>Credit</strong> — <code>Date / [Type /] Description / Merchant / Amount</code>. Positive
+amount = charge (expense), negative = payment/refund (income).</li>
+<li><strong>Savings</strong> — same shape as Bank.</li>
+</ul>
+<p>Every imported row is auto-categorized using:</p>
+<ol>
+<li>Your <strong>trained merchant rules</strong> (highest priority — see §7).</li>
+<li><strong>Inferred history</strong> from your existing transactions.</li>
+<li><strong>Built-in keyword rules</strong> (~80 patterns covering common merchants and bills).</li>
+<li>Otherwise → <strong>Other</strong>.</li>
+</ol>
+<p>The status line tells you how many rows landed in a real category and how many
+came from your trained rules.</p>
+<h3>Inline editing in the ledger</h3>
+<p>Every cell is editable in place. Click and type for title/memo, click and
+choose for date/account/category/type/amount. Cleared and selection
+checkboxes are stationary. Hover a row to reveal the <strong>✂️ split</strong> and <strong>× delete</strong>
+buttons.</p>
+<hr>
+<h2>4. Pay periods</h2>
+<p>A pay period is just a <code>[start, end]</code> window. Transactions fall into whichever
+period covers their date.</p>
+<ul>
+<li><strong>Add a new period</strong>: <code>+ Pay period</code> in the Ledger toolbar — appended after
+the last one with the configured frequency.</li>
+<li><strong>Edit a period</strong>: click the 📅 in its header to change start/end and label.</li>
+<li><strong>Delete a period</strong>: click the ✕ in its header. Transactions stay in the
+ledger but lose their grouping.</li>
+<li><strong>Collapse/expand</strong>: caret on the left of the header. Persisted across reloads.</li>
+<li><strong>⊞ Expand all / ⊟ Collapse all</strong> in the toolbar.</li>
+</ul>
+<p>The frequency for <em>new</em> periods is set in <code>⚙ Settings → Pay periods</code>:
+weekly, bi-weekly, semi-monthly (1–15 / 16–end), or monthly. Existing
+periods aren&#39;t rewritten when you change the setting.</p>
+<p>The header shows <strong>In / Out / Net / End</strong> (running balance through the end of
+this period, respecting any active account filter).</p>
+<p>The bottom of each table includes a <strong>Projected Remaining Budget</strong> row
+(italic, dashed, dark-green balance) showing what the ending balance would
+be if every remaining budgeted dollar were spent. It&#39;s a forecast, not a
+real transaction.</p>
+<hr>
+<h2>5. Categories and subcategories</h2>
+<p>Open the manager from the header → <strong>⚙ Categories</strong>.</p>
+<ul>
+<li>Each category has an <strong>emoji</strong>, <strong>color</strong>, and <strong>name</strong>, all editable inline.</li>
+<li>Tick <strong>Allow subs</strong> to enable subcategories on a category. By default only
+<strong>Bills</strong> allows subs (Rent, Electric, Water, Internet, Phone, Insurance,
+Subscriptions). You can flip the toggle on any other category if you want.</li>
+<li><strong>+ Add category</strong> at the bottom of the modal.</li>
+<li><strong>Income</strong> is special — it&#39;s the bucket that auto-receives import rows tagged
+as income. You can rename it but not delete it.</li>
+<li><strong>Categories sort A–Z</strong> in display, but operations key off stable IDs, so
+renaming or reordering never moves the wrong item.</li>
+</ul>
+<hr>
+<h2>6. Budgets</h2>
+<p>Each pay period has its own independent budget. <strong>No rollover</strong> — last
+period&#39;s leftover does not flow forward.</p>
+<p>Open a period&#39;s <code>💰 Budget Breakdown</code> row to see one card per category.</p>
+<ul>
+<li><strong>Bar</strong> — spent vs. effective budget. Turns red when over.</li>
+<li><strong>Override</strong> input — sets a manual budget for this period.</li>
+<li><strong>Subcategory rows</strong> (Bills only by default) — each gets its own budget,
+bar, and override. The parent category&#39;s effective budget is the larger of
+its own manual budget or the <em>sum</em> of its sub-budgets, whichever is higher.
+Mark <code>⚡ auto = sum of subs</code> indicates the sum is winning.</li>
+<li><strong>Spending is account-agnostic</strong> — toggling account filters in the header
+doesn&#39;t change budget math.</li>
+<li><strong>Neutral (<code>~</code>) and income transactions don&#39;t count</strong> as spending.</li>
+</ul>
+<hr>
+<h2>7. Auto-categorization &amp; learning</h2>
+<p>Three layers stacked, highest priority first:</p>
+<ol>
+<li><strong>Trained rules</strong> — built automatically every time you change a
+  transaction&#39;s Category in the ledger. One change is enough to redirect
+every future CSV row matching the same merchant signature.</li>
+<li><strong>Inferred history</strong> — for any merchant where ≥ 2 of your existing
+  transactions share a category, that becomes a soft inference until
+overridden by a trained rule.</li>
+<li><strong>Keyword rules</strong> — ~80 merchant patterns shipped with the app
+  (Wegmans/Kroger/Trader Joe&#39;s → Groceries, Shell/Exxon → Car &amp; Driving,
+Netflix/Spotify → Bills &gt; Subscriptions, etc.).</li>
+</ol>
+<h3>Triggers</h3>
+<ul>
+<li><strong>On every CSV import</strong>, each row is run through the categorizer.</li>
+<li><strong>🪄 Auto-categorize</strong> button on the Import card runs the categorizer over
+<em>every</em> existing transaction. One undo step rolls it back. Useful after
+training a few rules to retroactively fix old data.</li>
+</ul>
+<h3>Asymmetric type correction</h3>
+<p>When Auto-categorize runs over existing data:</p>
+<ul>
+<li>It will flip a transaction from Expense → Income if the categorizer
+strongly says Income (e.g. matched the <code>payroll</code> keyword) — useful for
+cleaning up bad imports.</li>
+<li>It will <strong>not</strong> flip Income → Expense even if the suggested category is
+non-Income. This protects legitimate refunds (Disney+ refund stays as Income).</li>
+</ul>
+<h3>Auditing what the model has learned</h3>
+<p><code>⚙ Settings → Learned merchant rules</code> shows every trained rule with:</p>
+<ul>
+<li>The merchant signature (e.g. <code>wegmans</code>)</li>
+<li>Where it routes (category + sub)</li>
+<li>Hit count and last-trained date</li>
+<li>An <code>×</code> to forget that one rule</li>
+</ul>
+<p>Or <strong>Clear all</strong> to wipe the lot. Forgetting rules doesn&#39;t change any
+transactions — it just stops biasing future categorization.</p>
+<hr>
+<h2>8. Recurring transactions</h2>
+<p>Add via the <strong>Recurring</strong> card. Frequencies: Weekly, Bi-weekly, Monthly,
+Bi-annually, Yearly, Custom (every N days). Optional end date.</p>
+<p>When you create or edit a rule, instances are generated forward up to <strong>2
+years</strong> from today. Editing one instance&#39;s date in the ledger affects only
+that one instance — not the whole series. Deleting the rule removes all
+its future instances.</p>
+<p>Recurring instances are flagged with a 🔄 in the title cell.</p>
+<hr>
+<h2>9. Splits</h2>
+<p>Hover a transaction → click <strong>✂️</strong>. Allocate the total across multiple
+categories. The save button is disabled until splits balance to the
+transaction total.</p>
+<p>Splits show in the Category cell as colored mini-badges. Both the donut and
+budget breakdown count each split part against its own category.</p>
+<p><code>Clear splits</code> returns the transaction to single-category mode.</p>
+<hr>
+<h2>10. Search &amp; filters</h2>
+<ul>
+<li><strong>Header search</strong> — filters titles, memos, and category names across every
+pay period in real time.</li>
+<li><strong>Account filter pills</strong> — multi-select. Affects the donut, ledger
+visibility, and the running-balance totals; <em>does not</em> affect budget math.</li>
+<li><strong>Donut legend</strong> — click any item to filter the ledger to just that
+category. Click again (or use the <code>Filter on • clear ×</code> pill in the header)
+to clear.</li>
+</ul>
+<hr>
+<h2>11. Selection &amp; bulk actions</h2>
+<ul>
+<li>Each transaction has a <strong>checkbox</strong> on the left.</li>
+<li>The <strong>table header checkbox</strong> for each pay period selects/deselects every
+transaction in that period (with an indeterminate state when only some are
+checked).</li>
+<li>Selected counts appear as <strong>Delete N</strong> in the Ledger toolbar.</li>
+</ul>
+<hr>
+<h2>12. Keyboard shortcuts</h2>
+<table>
+<thead>
+<tr>
+<th>Shortcut</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>⌘Z</code> / <code>Ctrl+Z</code></td>
+<td>Undo (60-step history)</td>
+</tr>
+<tr>
+<td><code>↑</code> / <code>↓</code></td>
+<td>Move focus to the same cell in the prev/next ledger row</td>
+</tr>
+<tr>
+<td><code>Enter</code></td>
+<td>Commit the current cell edit</td>
+</tr>
+<tr>
+<td><code>Esc</code></td>
+<td>Close the open modal</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>13. Backup, restore, reset</h2>
+<p><code>⚙ Settings</code>:</p>
+<ul>
+<li><strong>⬇ Download JSON backup</strong> — full state in one file (accounts, categories,
+transactions, recurring, pay periods, budgets, learned rules, settings).</li>
+<li><strong>⬆ Restore from JSON</strong> — replaces current state. One undo step is preserved.</li>
+<li><strong>Reset all data</strong> <em>(danger zone)</em> — wipes everything back to the defaults.
+Take a backup first.</li>
+</ul>
+<hr>
+<h2>14. PDF report</h2>
+<p><code>⚙ Settings → PDF report</code> — pick a pay period, click <strong>Download PDF</strong>. The
+PDF includes the period summary (income / expenses / net), the budget table,
+and the full transactions list for that period.</p>
+<hr>
+<h2>15. CSV export</h2>
+<p><strong>Import / Export → ⬇ Export CSV</strong> dumps the entire ledger to a single CSV
+sorted by date, with columns: Date, Account, Title, Category, Subcategory,
+Type, Amount (signed), Memo, Cleared.</p>
+<p>Useful for sharing data, opening in Excel/Numbers, or moving between two
+copies of the app.</p>
+<hr>
+<h2>16. Where data lives</h2>
+<ul>
+<li><strong>Browser localStorage</strong>, key <code>nfm_v1</code>. Per browser, per profile, per device.</li>
+<li>Clearing your browser&#39;s site data deletes everything — back up first.</li>
+<li>Private/Incognito windows don&#39;t share storage with regular windows.</li>
+<li>The store auto-saves on every change. There is no manual &quot;save.&quot;</li>
+</ul>
+<hr>
+<h2>17. Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Try this</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>npm install</code> fails on Node 18 or older</td>
+<td>Upgrade to Node 20+</td>
+</tr>
+<tr>
+<td>Dev server says port in use</td>
+<td>Change <code>server.port</code> in <code>vite.config.ts</code> or close the other process</td>
+</tr>
+<tr>
+<td>Import says &quot;No rows detected&quot;</td>
+<td>Check the CSV&#39;s first 8 rows — there must be a header line containing both a date keyword <em>and</em> an amount/debit/credit keyword</td>
+</tr>
+<tr>
+<td>Transactions show as wrong type</td>
+<td>Re-import after the parser fix, or use 🪄 Auto-categorize, or flip Type cell manually</td>
+</tr>
+<tr>
+<td>App is empty after a browser update</td>
+<td>Open Settings → Restore from JSON if you have a backup; otherwise localStorage was wiped</td>
+</tr>
+<tr>
+<td>Trained the wrong rule</td>
+<td>Settings → Learned merchant rules → click <code>×</code> next to it</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>18. Project layout (for developers)</h2>
+<pre><code>Family Budget/
+├── package.json, vite.config.ts, tailwind.config.js
+├── tsconfig*.json, postcss.config.js
+├── index.html
+├── README.md, MANUAL.md
+└── src/
+    ├── main.tsx, App.tsx, index.css
+    ├── types.ts                       data model
+    ├── store/
+    │   ├── store.ts                   Zustand + persistence + 60-step undo
+    │   ├── defaults.ts                default categories / accounts / state
+    │   └── selectors.ts
+    ├── lib/
+    │   ├── budget.ts                  spend/effective math
+    │   ├── categorize.ts              keyword rules + history + trained rules
+    │   ├── csv.ts                     bank/credit/savings parsers + export
+    │   ├── dates.ts, payPeriods.ts    pay-period generation
+    │   ├── pdf.ts                     PDF report
+    │   └── recurring.ts               2-year recurring instance generator
+    ├── components/
+    │   ├── Header, DonutCard, ImportCard, RecurringCard
+    │   ├── Ledger, PayPeriodSection, TransactionRow
+    │   ├── TransactionModal, SplitModal, RecurringModal
+    │   ├── CategoryManagerModal, SettingsModal
+    │   └── ui/                         Modal, Money, EmojiPicker
+    └── hooks/useGlobalKeys.ts          ⌘Z undo + ↑↓ row navigation
+</code></pre>
+
+</div>
+</body>
+</html>

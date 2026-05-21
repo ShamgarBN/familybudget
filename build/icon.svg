@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="168" y1="84" x2="856" y2="940" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1d4ed8"/>
+      <stop offset="0.55" stop-color="#2563eb"/>
+      <stop offset="1" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="card" x1="250" y1="230" x2="786" y2="800" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#dbeafe"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="28" stdDeviation="32" flood-color="#020617" flood-opacity="0.35"/>
+    </filter>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10"/>
+    </filter>
+  </defs>
+
+  <rect width="1024" height="1024" rx="228" fill="url(#bg)"/>
+  <circle cx="792" cy="198" r="178" fill="#60a5fa" opacity="0.25" filter="url(#soft)"/>
+  <circle cx="214" cy="812" r="220" fill="#22c55e" opacity="0.18" filter="url(#soft)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="188" y="206" width="648" height="618" rx="92" fill="url(#card)"/>
+    <rect x="238" y="284" width="548" height="92" rx="30" fill="#bfdbfe"/>
+    <rect x="286" y="442" width="188" height="34" rx="17" fill="#93c5fd"/>
+    <rect x="286" y="522" width="292" height="34" rx="17" fill="#cbd5e1"/>
+    <rect x="286" y="602" width="238" height="34" rx="17" fill="#cbd5e1"/>
+    <rect x="286" y="682" width="324" height="34" rx="17" fill="#cbd5e1"/>
+
+    <circle cx="682" cy="582" r="122" fill="none" stroke="#e2e8f0" stroke-width="52"/>
+    <circle cx="682" cy="582" r="122" fill="none" stroke="#22c55e" stroke-width="52"
+            stroke-linecap="round" stroke-dasharray="270 766" transform="rotate(-92 682 582)"/>
+    <circle cx="682" cy="582" r="122" fill="none" stroke="#f59e0b" stroke-width="52"
+            stroke-linecap="round" stroke-dasharray="172 864" transform="rotate(112 682 582)"/>
+    <circle cx="682" cy="582" r="122" fill="none" stroke="#ef4444" stroke-width="52"
+            stroke-linecap="round" stroke-dasharray="108 928" transform="rotate(218 682 582)"/>
+
+    <text x="512" y="358" text-anchor="middle"
+          font-family="Avenir Next, Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
+          font-size="96" font-weight="800" letter-spacing="-4" fill="#0f172a">NF</text>
+    <text x="512" y="762" text-anchor="middle"
+          font-family="Avenir Next, Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
+          font-size="52" font-weight="800" fill="#1d4ed8">$</text>
+  </g>
+</svg>

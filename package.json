@@ -1,0 +1,89 @@
+{
+  "name": "niemann-family-finances",
+  "private": true,
+  "version": "1.1.0",
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "docs:html": "node scripts/build-docs.mjs",
+    "electron": "electron .",
+    "dist:mac": "npm run build && electron-builder --mac --arm64"
+  },
+  "build": {
+    "appId": "com.niemann.familyfinances",
+    "productName": "Niemann Family Finances",
+    "asar": true,
+    "afterPack": "scripts/after-pack.cjs",
+    "directories": {
+      "buildResources": "build",
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "build/icon.png",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.finance",
+      "icon": "build/icon.icns",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ],
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false,
+      "identity": null,
+      "darkModeSupport": false,
+      "extendInfo": {
+        "LSApplicationCategoryType": "public.app-category.finance",
+        "NSHumanReadableCopyright": "© Niemann Family"
+      }
+    },
+    "dmg": {
+      "title": "Niemann Family Finances ${version}",
+      "writeUpdateInfo": false,
+      "sign": false
+    }
+  },
+  "dependencies": {
+    "chart.js": "^4.4.4",
+    "clsx": "^2.1.1",
+    "date-fns": "^3.6.0",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.8.2",
+    "papaparse": "^5.4.1",
+    "react": "^18.3.1",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18.3.1",
+    "uuid": "^10.0.0",
+    "zustand": "^4.5.4"
+  },
+  "devDependencies": {
+    "@types/papaparse": "^5.3.14",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@types/uuid": "^10.0.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "@vitest/ui": "^2.1.9",
+    "autoprefixer": "^10.4.19",
+    "electron": "^42.1.0",
+    "electron-builder": "^26.8.1",
+    "marked": "^18.0.3",
+    "postcss": "^8.4.39",
+    "tailwindcss": "^3.4.6",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.4",
+    "vitest": "^2.1.9"
+  }
+}

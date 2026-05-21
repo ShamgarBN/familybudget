@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Light theme is the default; the SettingsModal toggles `data-theme="dark"`
+     on <html> to flip palettes without a full reload. CSS variables are
+     stored as space-separated R G B integers so Tailwind's
+     "rgb(var(--c-x) / <alpha-value>)" wrapper can layer alpha on top. */
+  :root {
+    --c-bg: 240 243 248;
+    --c-ink: 11 18 32;
+    --c-muted: 100 116 139;
+    --c-line: 226 232 240;
+    --c-accent: 59 126 255;
+    --c-income: 22 163 74;
+    --c-overspend: 220 38 38;
+    --c-projected: 15 107 53;
+    --c-card-bg: 255 255 255;
+  }
+  [data-theme='dark'] {
+    --c-bg: 17 24 39;          /* slate-900-ish */
+    --c-ink: 226 232 240;       /* slate-200 */
+    --c-muted: 148 163 184;     /* slate-400 */
+    --c-line: 51 65 85;         /* slate-700 */
+    --c-accent: 96 165 250;     /* blue-400 */
+    --c-income: 74 222 128;     /* green-400 */
+    --c-overspend: 248 113 113; /* red-400 */
+    --c-projected: 134 239 172; /* green-300 */
+    --c-card-bg: 30 41 59;      /* slate-800 */
+  }
+
+  html, body, #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-bg text-ink font-sans antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  /* Numbers everywhere look tabular by default */
+  .num {
+    @apply font-mono tabular-nums;
+  }
+  [contenteditable] {
+    outline: none;
+  }
+  [contenteditable]:focus {
+    @apply ring-2 ring-accent/40 rounded-sm;
+  }
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
+}
+
+@layer components {
+  /* Use CSS-var-driven `--card-bg` so cards/pills/buttons darken in dark mode
+     without needing dark: variants on every element. */
+  .card {
+    background-color: rgb(var(--c-card-bg));
+    @apply rounded-card shadow-card border border-line;
+  }
+  .pill {
+    background-color: rgb(var(--c-card-bg));
+    @apply inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-sm text-ink/80 hover:border-accent/40 hover:text-ink transition;
+  }
+  .pill.active {
+    @apply bg-accent text-white border-accent shadow-sm;
+  }
+  .btn {
+    background-color: rgb(var(--c-card-bg));
+    @apply inline-flex items-center gap-1.5 rounded-md border border-line px-3 py-1.5 text-sm font-medium text-ink hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply bg-accent text-white border-accent hover:opacity-90;
+  }
+  .btn-danger {
+    @apply text-overspend border-overspend/30;
+    background-color: rgb(var(--c-card-bg));
+  }
+  .btn-danger:hover {
+    background-color: rgb(var(--c-overspend) / 0.1);
+  }
+  .input {
+    background-color: rgb(var(--c-card-bg));
+    @apply w-full rounded-md border border-line px-2.5 py-1.5 text-sm text-ink placeholder:text-muted/70 focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/30 transition;
+  }
+  .label {
+    @apply text-xs font-medium text-muted uppercase tracking-wide;
+  }
+  .app-drag {
+    -webkit-app-region: drag;
+  }
+  .app-no-drag {
+    -webkit-app-region: no-drag;
+  }
+  .row-flash {
+    animation: flash 1.2s ease-out 1;
+  }
+}
+
+@keyframes flash {
+  0% { background-color: rgba(59, 126, 255, 0.18); }
+  100% { background-color: transparent; }
+}
+
+/* Scrollbar polish (desktop) */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+::-webkit-scrollbar-track { background: transparent; }

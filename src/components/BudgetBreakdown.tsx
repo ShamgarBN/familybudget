@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import clsx from 'clsx'
 import type { Category, PayPeriod } from '../types'
 import { useStore } from '../store/store'
@@ -6,6 +6,74 @@ import { sortedCategories } from '../store/selectors'
 import { BILLS_CATEGORY_ID } from '../store/defaults'
 import { EPS, getB, getCategorySpent, getEffectiveB, getSpent } from '../lib/budget'
 import { Money, formatMoney } from './ui/Money'
+
+/**
+ * Local-state budget input. Writes to the store ONLY on blur / Enter
+ * (Escape reverts). Keeps `setBudget` from firing — and triggering a global
+ * re-render + undo snapshot + localStorage write — on every keystroke.
+ *
+ * When the underlying budget value changes externally (undo, restore from
+ * backup, etc.) we re-sync the visible text, but only while the input is
+ * not focused so we never overwrite mid-typing.
+ */
+const BudgetInput = memo(function BudgetInput({
+  value,
+  placeholder,
+  className,
+  ariaLabel,
+  onCommit,
+}: {
+  value: number
+  placeholder?: string
+  className?: string
+  ariaLabel?: string
+  onCommit: (next: number) => void
+}) {
+  const valueText = value ? String(value) : ''
+  const [text, setText] = useState(valueText)
+  const focusedRef = useRef(false)
+
+  useEffect(() => {
+    if (!focusedRef.current) setText(valueText)
+  }, [valueText])
+
+  const commit = () => {
+    const parsed = parseFloat(text)
+    const next = Number.isFinite(parsed) && parsed > 0 ? parsed : 0
+    if (next !== value) onCommit(next)
+    setText(next ? String(next) : '')
+  }
+
+  return (
+    <input
+      type="number"
+      inputMode="decimal"
+      step="0.01"
+      min="0"
+      className={className}
+      placeholder={placeholder}
+      aria-label={ariaLabel}
+      value={text}
+      onFocus={() => {
+        focusedRef.current = true
+      }}
+      onChange={(e) => setText(e.target.value)}
+      onBlur={() => {
+        focusedRef.current = false
+        commit()
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault()
+          ;(e.currentTarget as HTMLInputElement).blur()
+        } else if (e.key === 'Escape') {
+          setText(valueText)
+          ;(e.currentTarget as HTMLInputElement).blur()
+        }
+      }}
+    />
+  )
+})
 
 interface Props {
   period: PayPeriod
@@ -106,16 +174,12 @@ export function BudgetBreakdown({ period }: Props) {
           </span>
           <label className="flex items-center gap-2 shrink-0">
             <span className="label">Budget</span>
-            <input
-              type="number"
-              step="0.01"
-              min="0"
-              className="input py-1 text-xs w-24"
+            <BudgetInput
+              value={manual}
               placeholder={eff.isAuto ? formatMoney(eff.auto) : '0.00'}
-              value={manual || ''}
-              onChange={(e) =>
-                setBudget(period.id, c.id, parseFloat(e.target.value) || 0)
-              }
+              className="input py-1 text-xs w-24"
+              ariaLabel={`${c.name} budget`}
+              onCommit={(next) => setBudget(period.id, c.id, next)}
             />
           </label>
         </div>
@@ -149,21 +213,12 @@ export function BudgetBreakdown({ period }: Props) {
                     <span className="text-muted mx-1">/</span>
                     {formatMoney(sb)}
                   </span>
-                  <input
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    className="input py-0.5 px-1 text-xs w-20"
-                    value={sb || ''}
+                  <BudgetInput
+                    value={sb}
                     placeholder="0"
-                    onChange={(e) =>
-                      setBudget(
-                        period.id,
-                        c.id,
-                        parseFloat(e.target.value) || 0,
-                        s.id,
-                      )
-                    }
+                    className="input py-0.5 px-1 text-xs w-20"
+                    ariaLabel={`${c.name} / ${s.name} budget`}
+                    onCommit={(next) => setBudget(period.id, c.id, next, s.id)}
                   />
                   <div className="w-20 h-1 rounded-full bg-slate-100 overflow-hidden">
                     <div

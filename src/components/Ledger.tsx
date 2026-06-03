@@ -114,16 +114,18 @@ export function Ledger() {
     let pIdx = 0
     for (const t of sortedTx) {
       if (t.skipped) continue
+      // Stamp end-of-period balance BEFORE applying this tx, so a transaction
+      // dated in the next period (paycheck on the 1st, etc.) doesn't bleed
+      // into the prior period's reported end balance.
+      while (pIdx < sorted.length && t.date > sorted[pIdx].end) {
+        endByPeriod.set(sorted[pIdx].id, bal)
+        pIdx++
+      }
       // Account-filter respected so the displayed running balance matches the visible filter.
       if (!ui.accountFilter.length || ui.accountFilter.includes(t.account)) {
         if (t.type === 'income') bal += t.amount
         else if (t.type === 'expense') bal -= t.amount
         balances.set(t.id, bal)
-      }
-      // Stamp end-of-period balance whenever we cross past a period's end date.
-      while (pIdx < sorted.length && t.date > sorted[pIdx].end) {
-        endByPeriod.set(sorted[pIdx].id, bal)
-        pIdx++
       }
     }
     while (pIdx < sorted.length) {

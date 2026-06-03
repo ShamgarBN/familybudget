@@ -221,9 +221,61 @@ img { max-width: 100%; height: auto; }
     </div>
   </div>
 <h1>Niemann Family Finances</h1>
-<p>A local-first family budgeting app. All data lives in your browser via
-<code>localStorage</code> — no server, no account, no tracking.</p>
-<h2>Quick start</h2>
+<p>A local-first family budgeting app. All data lives on your computer (browser
+<code>localStorage</code> for the web build, <code>userData/</code> for the desktop build) — no
+server, no account, no tracking.</p>
+<p><strong>Current release:</strong> <code>v1.1.2</code> — see
+<a href="https://github.com/ShamgarBN/familybudget/releases">Releases</a> for the signed
+macOS Apple-Silicon <code>.dmg</code>.</p>
+<h2>What&#39;s new in 1.1.2</h2>
+<ul>
+<li><strong>Fixed: rolling projected balance off by one transaction at period
+boundaries.</strong> A transaction dated on the first day of a new pay period
+(paycheck on the 1st, autopay bills, etc.) was being applied to the
+<em>previous</em> period&#39;s end balance, inflating both the &quot;End&quot; and &quot;Projected&quot;
+pills for that period. The per-row Balance column was always correct;
+only the period-level totals were affected.</li>
+</ul>
+<h2>What&#39;s new in 1.1.0</h2>
+<ul>
+<li><strong>Performance</strong> — fixed the 4–7 s typing lag in the ledger by moving rows to
+controlled inputs + <code>React.memo</code>, and stopped persisting the full state on
+every search keystroke or filter toggle.</li>
+<li><strong>Recurring transactions</strong> — manual edits to a generated instance are now
+<em>durable</em> (per-field <code>overrides</code>); rule edits propagate to non-overridden
+fields. New per-rule <strong>Pause</strong> and per-instance <strong>Skip</strong>, plus a click-to-revert
+✎ override badge.</li>
+<li><strong>Transfers &amp; credit cards</strong> — neutral <code>Transfer</code> and <code>Credit Card</code> categories
+that move money between accounts without polluting income/expense totals; new
+<strong>Recurring transfer</strong> template that creates the matched out/in pair.</li>
+<li><strong>Budgeting &amp; projections</strong> — every pay period now shows a <strong>rolling
+projected balance</strong> in the header (rolls forward across all future months);
+Budget Breakdown stretches Bills horizontally with alphabetized subs and
+splits &quot;Christmas&quot; and &quot;Transfer&quot; into separate boxes.</li>
+<li><strong>Insights</strong> — donut chart now drills into Bills subcategories; new
+12-month <strong>Trends + Budget vs. Actual variance</strong> card.</li>
+<li><strong>Reconciliation</strong> — new ⚙ Settings → &quot;Reconcile against statement&quot; flow
+for matching cleared totals to a bank statement.</li>
+<li><strong>Search operators</strong> — <code>amount:&gt;50</code>, <code>category:Bills</code>, <code>account:&quot;Bank Account&quot;</code>,
+<code>cleared:no</code>, <code>flagged:yes</code>, <code>before:2026-04-01</code>, <code>after:2026-01-15</code>,
+<code>type:expense</code>.</li>
+<li><strong>Bulk actions</strong> — multi-select rows in the ledger to set category / cleared /
+date / account or delete in one shot.</li>
+<li><strong>Per-account starting balance</strong> in Settings (anchors running balances when
+you import partial history).</li>
+<li><strong>Keyboard</strong> — ⌘N new transaction · ⌘F focus search · ⌘, settings · ⌘Z undo.</li>
+<li><strong>Dark mode</strong> — light · dark · follow-system, in Settings.</li>
+<li><strong>Daily auto-backup</strong> — rolling 14-day local snapshots, restorable from
+Settings, plus a <code>schemaVersion</code> migration ladder so older data upgrades
+safely.</li>
+<li><strong>Custom date picker</strong> — type &quot;today&quot;, <code>5/15/26</code>, or pick from a calendar
+without arrow keys ever bumping the underlying date.</li>
+<li><strong>Desktop polish</strong> — single-instance lock, persisted window position/size,
+external links open in the default browser.</li>
+<li><strong>Tests</strong> — Vitest unit tests for <code>budget</code>, <code>categorize</code>, <code>recurring</code>.</li>
+</ul>
+<p>See <a href="MANUAL.html"><code>MANUAL.md</code></a> for the full feature reference.</p>
+<h2>Quick start (web / dev)</h2>
 <p>Requires <strong>Node.js 20.x or newer</strong>.</p>
 <pre><code class="language-bash">npm install
 npm run dev      # http://localhost:5173
@@ -232,51 +284,46 @@ npm run dev      # http://localhost:5173
 <pre><code class="language-bash">npm run build    # writes ./dist
 npm run preview  # serves the production build at http://localhost:4173
 </code></pre>
-<h2>Moving to another computer</h2>
-<ol>
-<li>Copy the project folder (skip <code>node_modules</code> / <code>dist</code> if you want to keep it small).</li>
-<li>On the new machine: <code>npm install</code>, then <code>npm run dev</code>.</li>
-<li><strong>Move your data separately</strong> — open the app, <code>⚙ Settings → ⬇ Download JSON backup</code>,
-carry the file over, then <code>⚙ Settings → ⬆ Restore from JSON</code>.</li>
-</ol>
-<p>The data is stored in browser <code>localStorage</code> (key <code>nfm_v1</code>), not in the
-project files, so the project copy and the data backup are two distinct steps.</p>
-<h2>Ship it as a desktop app (macOS)</h2>
-<p>For someone who just wants to double-click an icon — not run terminals — build the
-native macOS app:</p>
-<pre><code class="language-bash">npm run dist:mac
+<p>Run the tests:</p>
+<pre><code class="language-bash">npm test         # one-shot
+npm run test:watch
 </code></pre>
-<p>This produces:</p>
-<ul>
-<li><code>release/Niemann Family Finances-1.0.0-arm64.dmg</code> — drag-to-Applications installer</li>
-<li><code>release/mac-arm64/Niemann Family Finances.app</code> — the unpacked app for direct testing</li>
-</ul>
-<p>Target is Apple Silicon (M1/M2/M3/M4). See <strong><a href="MANUAL.html#installing-the-macos-app">MANUAL.md → &quot;Installing the macOS
-app&quot;</a></strong> for the full handoff workflow.</p>
-<h2>Full user manual</h2>
-<p>See <strong><a href="MANUAL.html">MANUAL.md</a></strong> for the complete walkthrough — feature reference,
-keyboard shortcuts, data formats, and troubleshooting.</p>
+<h2>Install the macOS desktop app</h2>
+<p>The non-techy path: download the latest <code>.dmg</code> from
+<a href="https://github.com/ShamgarBN/familybudget/releases">Releases</a>, drag the app
+into <code>Applications</code>, then double-click. Apple-Silicon (M1/M2/M3/M4) only.</p>
+<p>The DMG is <strong>ad-hoc code-signed</strong>, not notarised. The first launch may need a
+right-click → <em>Open</em> to bypass Gatekeeper. See
+<a href="MANUAL.html#installing-the-macos-app"><code>MANUAL.md → &quot;Installing the macOS app&quot;</code></a>
+for the full handoff workflow.</p>
+<p>To rebuild the DMG yourself:</p>
+<pre><code class="language-bash">npm run dist:mac
+# → release/Niemann Family Finances-&lt;version&gt;-arm64.dmg
+</code></pre>
+<h2>Moving your data between computers</h2>
+<p>The app folder and your <strong>data</strong> are separate. To carry data between machines:</p>
+<ol>
+<li>Open the app → ⚙ Settings → <strong>Download JSON backup</strong>.</li>
+<li>Move the file to the new machine.</li>
+<li>Open the app there → ⚙ Settings → <strong>Restore from JSON</strong>.</li>
+</ol>
+<p>A rolling 14-day local auto-backup is also kept; you can restore from those
+in the same Settings panel.</p>
 <h2>Stack</h2>
 <ul>
 <li>React 18 + TypeScript + Vite</li>
-<li>Tailwind CSS</li>
-<li>Zustand (state + 60-step undo)</li>
-<li>Chart.js (<code>react-chartjs-2</code>) for the donut</li>
-<li>jsPDF + jspdf-autotable for PDF reports</li>
+<li>Tailwind CSS (CSS-variable themed for dark mode)</li>
+<li>Zustand with <code>localStorage</code> persistence + 30-step undo + schema-version
+migration ladder</li>
+<li>Chart.js (<code>react-chartjs-2</code>) for the donut and trends/variance cards</li>
+<li>jsPDF + <code>jspdf-autotable</code> for per-period and date-range PDF reports</li>
 <li>PapaParse for CSV import / export</li>
+<li><code>date-fns</code> for pay-period math</li>
+<li>Electron 42 + <code>electron-builder</code> for the desktop bundle (ad-hoc signed)</li>
+<li>Vitest for unit tests</li>
 </ul>
-<h2>Highlights</h2>
-<ul>
-<li>Inline-editable ledger with pay periods (weekly / bi-weekly / semi-monthly / monthly)</li>
-<li>Per-period budgets, with subcategory support on Bills (and any other
-category you flag &quot;Allow subs&quot;)</li>
-<li>CSV import for bank, credit, and savings accounts with smart header detection
-(handles parens-style negatives, two-column Debit/Credit, and metadata blocks)</li>
-<li><strong>Self-improving auto-categorizer</strong> — every manual category change becomes a
-durable rule that influences future imports</li>
-<li>Splits, recurring rules (2-year horizon), donut chart with click-to-filter</li>
-<li>Full JSON backup/restore + per-period PDF reports + CSV export</li>
-</ul>
+<h2>License</h2>
+<p>Private / family use.</p>
 
 </div>
 </body>

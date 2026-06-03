@@ -4,9 +4,18 @@ A local-first family budgeting app. All data lives on your computer (browser
 `localStorage` for the web build, `userData/` for the desktop build) — no
 server, no account, no tracking.
 
-**Current release:** `v1.1.0` — see
+**Current release:** `v1.1.2` — see
 [Releases](https://github.com/ShamgarBN/familybudget/releases) for the signed
 macOS Apple-Silicon `.dmg`.
+
+## What's new in 1.1.2
+
+- **Fixed: rolling projected balance off by one transaction at period
+  boundaries.** A transaction dated on the first day of a new pay period
+  (paycheck on the 1st, autopay bills, etc.) was being applied to the
+  *previous* period's end balance, inflating both the "End" and "Projected"
+  pills for that period. The per-row Balance column was always correct;
+  only the period-level totals were affected.
 
 ## What's new in 1.1.0
 
